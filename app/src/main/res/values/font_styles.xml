@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Style for TextInputLayout's hint text appearance -->
+    <style name="HintTextItalicStyle" parent="@style/TextAppearance.MaterialComponents.Caption">
+        <item name="android:textStyle">italic</item>
+    </style>
+</resources>
