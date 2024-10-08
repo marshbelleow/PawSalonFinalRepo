@@ -13,13 +13,13 @@
         android:theme="@style/Theme.PawSalon"
         tools:targetApi="31">
         <activity
-            android:name=".view.ForgotPasswordActivity"
+            android:name=".view.UserProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".view.LoginActivity"
-            android:exported="false" />
+            android:name=".AccountSetup"
+            android:exported="false" /> <!-- Splash Activity -->
         <activity
-            android:name=".view.SignUpActivity"
+            android:name=".view.LoginSignupActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +27,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".view.NewPasswordActivity"
+            android:exported="true" />
+        <activity
+            android:name=".view.ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.SignUpActivity"
+            android:exported="true" /> <!-- Preloaded Fonts Meta-Data -->
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

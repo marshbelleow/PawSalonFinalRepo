@@ -18,7 +18,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
         mBinding = ActivityLoginBinding.inflate(LayoutInflater.from(this))
         setContentView(mBinding.root)
 
-        // Setting up listeners
+
         mBinding.loginUsernameEt.onFocusChangeListener = this
         mBinding.loginPasswordEt.onFocusChangeListener = this
 

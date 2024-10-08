@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Profile Image -->
+    <ImageView
+        android:id="@+id/profileImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:src="@drawable/no_profile_photo"
+        android:contentDescription="@string/profile_image_desc"
+        android:scaleType="centerCrop"
+        android:background="@drawable/circle_background"
+        android:padding="5dp" />
+
+    <Button
+        style="@style/Button5"
+        android:id="@+id/uploadImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload Profile Photo"
+        android:layout_gravity="center" />
+
+    <!-- User Details -->
+    <EditText
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:id="@+id/editFirstName"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="First Name" />
+
+    <EditText
+        android:id="@+id/editUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Username" />
+
+    <EditText
+        android:id="@+id/editPhoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Phone Number" />
+
+    <EditText
+        android:id="@+id/editBirthday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Birthday (YYYY-MM-DD)" />
+
+    <EditText
+        android:id="@+id/editAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Address" />
+
+    <Button
+        style="@style/Button5"
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save Details"
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp"/>
+
+    <!-- Pet Details Section -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pet Details"
+        android:textSize="20sp"
+        android:layout_marginTop="32dp"/>
+
+    <EditText
+        android:id="@+id/editPetName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Pet Name" />
+
+    <EditText
+        android:id="@+id/editPetBreed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Pet Breed" />
+
+    <ImageView
+        android:id="@+id/petImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_pet_placeholder"
+        android:contentDescription="@string/pet_image_desc"
+        android:scaleType="centerCrop"
+        android:background="@drawable/circle_background"
+        android:padding="5dp" />
+
+    <Button
+        style="@style/Button5"
+        android:id="@+id/uploadPetImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload Pet Photo"
+        android:layout_gravity="center" />
+
+    <Button
+        style="@style/Button5"
+        android:id="@+id/savePetButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save Pet Details"
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp"/>
+</LinearLayout>

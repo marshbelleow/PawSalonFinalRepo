@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".view.LoginSignupActivity">
+
+    <!-- Logo ImageView -->
+
+    <!-- CardView for Login/Signup options -->
+
+    <ImageView
+        android:id="@+id/logoImage"
+        android:layout_width="191dp"
+        android:layout_height="107dp"
+        android:layout_marginTop="24dp"
+        android:contentDescription="@string/app_logo"
+        android:src="@drawable/transwordlogo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.6" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/loginSignupCard"
+        android:layout_width="320dp"
+        android:layout_height="355dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/lightblue"
+        app:cardCornerRadius="40dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logoImage"
+        app:layout_constraintWidth_percent="0.85">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Title Text -->
+            <TextView
+                android:id="@+id/greetingsText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/poppins_bold"
+                android:gravity="center"
+                android:lineSpacingExtra="6dp"
+                android:text="@string/greetings_main"
+                android:textColor="@color/dark_teal_blue"
+                android:textSize="24sp" />
+
+            <!-- Short description Text -->
+            <TextView
+                android:id="@+id/shortDescText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lineSpacingExtra="5dp"
+                android:paddingHorizontal="20dp"
+                android:text="@string/short_desc"
+                android:fontFamily="@font/poppins"
+                android:textColor="@color/dark_teal_blue"
+                android:textSize="12sp" />
+
+            <!-- Login Button -->
+            <Button
+                android:id="@+id/btn_Login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/mamamoblue"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:paddingVertical="10dp"
+                android:text="@string/login_to_paw_salon"
+                android:fontFamily="@font/poppins_semibold"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <!-- Signup Button -->
+            <Button
+                android:id="@+id/btn_Signup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/my_primary"
+                android:fontFamily="@font/poppins_semibold"
+                android:paddingVertical="10dp"
+                android:text="@string/sign_up_text"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Background Illustration Image -->
+    <ImageView
+        android:id="@+id/backgroundImage"
+        android:layout_width="220dp"
+        android:layout_height="195dp"
+        android:contentDescription="@string/background_image"
+        android:src="@drawable/mainbgillustration"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/loginSignupCard"
+        app:layout_constraintWidth_percent="0.85" />
+</androidx.constraintlayout.widget.ConstraintLayout>
