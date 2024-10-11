@@ -4,12 +4,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.pawsalon.R
+import com.example.pawsalon.network.ForgotPasswordRequest
+import com.example.pawsalon.network.ForgotPasswordResponse
+import com.example.pawsalon.RetrofitInstance
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import android.widget.Button
-import com.example.pawsalon.R
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ForgotPasswordActivity : AppCompatActivity() {
 
@@ -59,7 +65,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
             val phoneNumber = phoneNumberEt.text.toString().trim().removePrefix(countryCode)
 
             if (isPhoneNumberValid(phoneNumber)) {
-                // If valid, proceed to reset password
+                // Proceed with the forgot password API call if phone number is valid
                 proceedWithPasswordReset(phoneNumber)
             } else {
                 // Show error message if phone number is invalid
@@ -74,13 +80,26 @@ class ForgotPasswordActivity : AppCompatActivity() {
         return phoneNumber.length == 10 && phoneNumber.startsWith("9") && phoneNumber.all { it.isDigit() }
     }
 
+    // Function to proceed with the password reset
     private fun proceedWithPasswordReset(phoneNumber: String) {
-        // Show a toast message indicating success
-        Toast.makeText(this, "Proceeding to reset password for $countryCode$phoneNumber", Toast.LENGTH_SHORT).show()
+        val request = ForgotPasswordRequest(phoneNumber)
 
-        // Proceed to ResetPasswordActivity, passing the phone number
-        val intent = Intent(this, OtpPasswordActivity::class.java)
-        intent.putExtra("phoneNumber", "$countryCode$phoneNumber")
-        startActivity(intent)
+        // Call the API to send the forgot password request
+        RetrofitInstance.apiService.forgotPassword(request).enqueue(object : Callback<ForgotPasswordResponse> {
+            override fun onResponse(call: Call<ForgotPasswordResponse>, response: Response<ForgotPasswordResponse>) {
+                if (response.isSuccessful) {
+                    Toast.makeText(this@ForgotPasswordActivity, "Reset link sent!", Toast.LENGTH_SHORT).show()
+                    // Optionally navigate to another activity, e.g., back to login
+                    startActivity(Intent(this@ForgotPasswordActivity, LoginActivity::class.java))
+                    finish()
+                } else {
+                    Toast.makeText(this@ForgotPasswordActivity, "Error: ${response.message()}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ForgotPasswordResponse>, t: Throwable) {
+                Toast.makeText(this@ForgotPasswordActivity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }

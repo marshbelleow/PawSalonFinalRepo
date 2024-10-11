@@ -5,9 +5,16 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pawsalon.R
 import com.example.pawsalon.databinding.ActivityLoginBinding
+import com.example.pawsalon.network.LoginRequest
+import com.example.pawsalon.network.LoginResponse
+import com.example.pawsalon.RetrofitInstance
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeListener, View.OnKeyListener {
 
@@ -17,7 +24,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
         super.onCreate(savedInstanceState)
         mBinding = ActivityLoginBinding.inflate(LayoutInflater.from(this))
         setContentView(mBinding.root)
-
 
         mBinding.loginUsernameEt.onFocusChangeListener = this
         mBinding.loginPasswordEt.onFocusChangeListener = this
@@ -49,8 +55,28 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
 
     private fun handleLogin() {
         if (validateUsername() && validatePassword()) {
-            // TODO: Implement actual login logic (e.g., API request or navigation to home page)
-            println("Login Successful!")
+            val username = mBinding.loginUsernameEt.text.toString()
+            val password = mBinding.loginPasswordEt.text.toString()
+
+            // Create LoginRequest object
+            val loginRequest = LoginRequest(username, password)
+
+            // Call the login API using Retrofit
+            RetrofitInstance.apiService.login(loginRequest).enqueue(object : Callback<LoginResponse> {
+                override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                    if (response.isSuccessful && response.body() != null) {
+                        val loginResponse = response.body()
+                        Toast.makeText(this@LoginActivity, "Login Successful: ${loginResponse?.message}", Toast.LENGTH_SHORT).show()
+                        // Navigate to the next screen or save token
+                    } else {
+                        Toast.makeText(this@LoginActivity, "Login failed: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                    Toast.makeText(this@LoginActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
     }
 

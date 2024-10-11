@@ -4,7 +4,7 @@
     <!-- Background circle -->
     <item>
         <shape android:shape="oval">
-            <solid android:color="@color/black"/> <!-- Background color -->
+            <solid android:color="@color/Gray"/> <!-- Background color -->
         </shape>
     </item>
 

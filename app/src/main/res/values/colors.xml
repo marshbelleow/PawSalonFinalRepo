@@ -17,6 +17,7 @@
     <color name="very_lightblue">#D5FFFF</color>
     <color name="focused_blue">#0077b6</color>
     <color name="dark_teal_blue">#215D6E</color>
-    <color name="tansparentColor">#00FFFFFF</color>
+    <color name="transparentColor">#00FFFFFF</color>
+    <color name="mamamobluedark">#5E98AA</color>
 
 </resources>

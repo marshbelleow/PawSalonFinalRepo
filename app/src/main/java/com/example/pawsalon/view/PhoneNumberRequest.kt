@@ -1,4 +1,4 @@
-package com.example.pawsalon.model
+package com.example.pawsalon.view
 
 data class PhoneNumberRequest(val phone_number: String) {
     fun isValid(): Boolean {

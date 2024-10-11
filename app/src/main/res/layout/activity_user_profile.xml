@@ -1,117 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:background="@color/white"
+    tools:context=".view.UserProfileActivity">
 
-    <!-- Profile Image -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <ImageView
         android:id="@+id/profileImage"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:src="@drawable/no_profile_photo"
-        android:contentDescription="@string/profile_image_desc"
-        android:scaleType="centerCrop"
+        android:layout_marginTop="76dp"
         android:background="@drawable/circle_background"
-        android:padding="5dp" />
+        android:src="@drawable/person_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        style="@style/Button5"
-        android:id="@+id/uploadImageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Upload Profile Photo"
-        android:layout_gravity="center" />
-
-    <!-- User Details -->
-    <EditText
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:id="@+id/editFirstName"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:hint="First Name" />
-
-    <EditText
-        android:id="@+id/editUsername"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Username" />
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="445dp">
 
-    <EditText
-        android:id="@+id/editPhoneNumber"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Phone Number" />
 
-    <EditText
-        android:id="@+id/editBirthday"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Birthday (YYYY-MM-DD)" />
+    </LinearLayout>
 
-    <EditText
-        android:id="@+id/editAddress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Address" />
-
-    <Button
-        style="@style/Button5"
-        android:id="@+id/saveButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Save Details"
-        android:layout_gravity="center"
-        android:layout_marginTop="24dp"/>
-
-    <!-- Pet Details Section -->
     <TextView
+        android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pet Details"
-        android:textSize="20sp"
-        android:layout_marginTop="32dp"/>
+        android:text="Full Name"
+        android:fontFamily="@font/poppins_semibold"
+        android:textColor="@color/my_primary"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/profileImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
 
-    <EditText
-        android:id="@+id/editPetName"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Pet Name" />
+        android:text="@string/username"
+        android:fontFamily="@font/poppins"
+        android:textColor="@color/my_primary"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/tvName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"/>
 
-    <EditText
-        android:id="@+id/editPetBreed"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tvPhone"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Pet Breed" />
+        android:text="Phone: 09123456789"
+        android:fontFamily="@font/poppins"
+        android:textColor="@color/my_primary"
+        app:layout_constraintTop_toBottomOf="@id/tvUsername"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
 
-    <ImageView
-        android:id="@+id/petImage"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:src="@drawable/ic_pet_placeholder"
-        android:contentDescription="@string/pet_image_desc"
-        android:scaleType="centerCrop"
-        android:background="@drawable/circle_background"
-        android:padding="5dp" />
+    <TextView
+        android:id="@+id/tvAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:textColor="@color/my_primary"
+        android:text="Address: Bonuan, Dagupan City, Pangasinan"
+        app:layout_constraintTop_toBottomOf="@id/tvPhone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        style="@style/Button5"
-        android:id="@+id/uploadPetImageButton"
+        android:id="@+id/btnEditProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Upload Pet Photo"
-        android:layout_gravity="center" />
+        android:text="Edit Profile"
+        android:fontFamily="@font/poppins_semibold"
+        app:layout_constraintTop_toBottomOf="@id/tvAddress"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        startIcon/>
 
-    <Button
-        style="@style/Button5"
-        android:id="@+id/savePetButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Save Pet Details"
-        android:layout_gravity="center"
-        android:layout_marginTop="24dp"/>
-</LinearLayout>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/loginCard"
+        android:layout_width="320dp"
+        android:layout_height="150dp"
+        android:backgroundTint="@color/lightblue"
+        app:cardCornerRadius="25dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintWidth_percent="0.85"
+        tools:layout_editor_absoluteY="473dp">
+
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

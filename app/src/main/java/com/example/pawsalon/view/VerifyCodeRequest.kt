@@ -1,4 +1,4 @@
-package com.example.pawsalon.model
+package com.example.pawsalon.view
 
 data class VerifyCodeRequest(val phone_number: String, val verification_code: String) {
     fun isValid(): Boolean {
