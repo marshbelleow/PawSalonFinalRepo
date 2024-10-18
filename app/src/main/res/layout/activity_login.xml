@@ -75,6 +75,10 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="5dp"
                 android:minHeight="62dp"
+                app:endIconDrawable="@drawable/person_icon"
+                app:endIconTint="@color/Gray"
+                app:endIconContentDescription="@string/username"
+                app:endIconMode="custom"
                 app:errorTextAppearance="@style/CustomTextInputError">
 
                 <com.google.android.material.textfield.TextInputEditText

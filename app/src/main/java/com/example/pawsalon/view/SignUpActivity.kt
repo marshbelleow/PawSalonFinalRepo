@@ -10,7 +10,13 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pawsalon.R
+import com.example.pawsalon.RetrofitInstance
 import com.example.pawsalon.databinding.ActivitySignupBinding
+import com.example.pawsalon.network.SignUpRequest
+import com.example.pawsalon.network.SignUpResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 // This class handles the user sign-up process, including validation of input fields
 class SignUpActivity : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeListener, View.OnKeyListener {
@@ -28,8 +34,7 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener, View.OnFocusCh
         mBinding.signupUsernameEt.onFocusChangeListener = this
         mBinding.signupPasswordEt.onFocusChangeListener = this
         mBinding.signupCPasswordEt.onFocusChangeListener = this
-        mBinding.firstnameSetupEt.onFocusChangeListener = this
-        mBinding.lastnameSetupEt.onFocusChangeListener = this
+        mBinding.fullnameSetupEt.onFocusChangeListener = this
         mBinding.signupEmailEt.onFocusChangeListener = this
 
         // Set up click listener for the "Sign In" button to navigate to the login screen
@@ -40,10 +45,32 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener, View.OnFocusCh
         // Set up click listener for the "Sign Up" button to validate fields and sign up
         mBinding.signupBigBtn.setOnClickListener {
             if (validateAllFields()) {
+
+                val fullName = mBinding.fullnameSetupEt.text.toString().trim()
+                val username = mBinding.signupUsernameEt.text.toString().trim()
+                val email = mBinding.signupEmailEt.text.toString().trim()
+                val password = mBinding.signupPasswordEt.text.toString().trim()
+                val registerRequest = SignUpRequest(fullName, username, email, password)
+                val apiService = RetrofitInstance.getClient().create(ApiService::class.java)
+
                 // If all fields are valid, show a message and proceed with sign-up
-                Toast.makeText(this, "All fields are valid", Toast.LENGTH_SHORT).show()
+                apiService.signup(registerRequest).enqueue(object: Callback<SignUpResponse>{
+                    override fun onResponse(call: Call<SignUpResponse>, response: Response<SignUpResponse>) {
+                        if (response.isSuccessful) {
+                            Toast.makeText(this@SignUpActivity, "Registered Successfully!", Toast.LENGTH_SHORT).show()
+                            // Navigate to login
+                            startActivity(Intent(this@SignUpActivity, LoginActivity::class.java))
+                            finish()
+                        } else {
+                            Toast.makeText(this@SignUpActivity, "Error: ${response.message()}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<SignUpResponse>, t: Throwable) {
+                        Toast.makeText(this@SignUpActivity, "Network error: ${t.message}", Toast.LENGTH_LONG).show()
+                    }
+                })
             } else {
-                // If any field is invalid, show a message to fill all required fields
                 Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show()
             }
         }
@@ -58,19 +85,19 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener, View.OnFocusCh
 
     // This method validates all input fields (first name, last name, email, username, password)
     private fun validateAllFields(): Boolean {
-        val isFirstNameValid = validateFirstName()
+        val isFullNameValid = validateFullName()
         val isEmailValid = validateEmail()
         val isUsernameValid = validateUsername()
         val isPasswordValid = validatePassword() && validatePasswordAndConfirmPassword() && validateConfirmPassword()
 
         // If any of the fields are invalid, return false. Otherwise, return true
-        return isFirstNameValid && isEmailValid && isUsernameValid && isPasswordValid && validateConfirmPassword()
+        return isFullNameValid && isEmailValid && isUsernameValid && isPasswordValid && validateConfirmPassword()
     }
 
     // Validate the first name field
-    private fun validateFirstName(): Boolean {
+    private fun validateFullName(): Boolean {
         var errorMessage: String? = null
-        val firstName: String = mBinding.firstnameSetupEt.text.toString().trim()
+        val firstName: String = mBinding.fullnameSetupEt.text.toString().trim()
 
         if (firstName.isEmpty()) {
             errorMessage = "First Name is required"
@@ -78,38 +105,18 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener, View.OnFocusCh
 
         if (errorMessage != null) {
             // If there is an error, show it in the TextInputLayout
-            mBinding.firstnameSetupTil.apply {
+            mBinding.fullnameSetupTil.apply {
                 isErrorEnabled = true
                 error = errorMessage
             }
         } else {
-            mBinding.firstnameSetupTil.isErrorEnabled = false
+            mBinding.fullnameSetupTil.isErrorEnabled = false
         }
 
         return errorMessage == null
     }
 
-    // Validate the last name field
-    private fun validateLastName(): Boolean {
-        var errorMessage: String? = null
-        val lastName: String = mBinding.lastnameSetupEt.text.toString().trim()
 
-        if (lastName.isEmpty()) {
-            errorMessage = "First Name is required"
-        }
-
-        if (errorMessage != null) {
-            // If there is an error, show it in the TextInputLayout
-            mBinding.lastnameSetupTil.apply {
-                isErrorEnabled = true
-                error = errorMessage
-            }
-        } else {
-            mBinding.lastnameSetupTil.isErrorEnabled = false
-        }
-
-        return errorMessage == null
-    }
 
 
     // Validate the email field (checks for empty and valid email format)
@@ -249,8 +256,7 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener, View.OnFocusCh
             R.id.signup_UsernameEt -> if (!hasFocus) validateUsername()
             R.id.signup_PasswordEt -> if (!hasFocus) validatePassword()
             R.id.signup_cPasswordEt -> if (!hasFocus) validateConfirmPassword()
-            R.id.firstname_setupEt -> if (!hasFocus) validateFirstName()
-            R.id.lastname_setupEt -> if (!hasFocus) validateLastName()
+            R.id.fullname_setupEt -> if (!hasFocus) validateFullName()
             R.id.signup_emailEt -> if (!hasFocus) validateEmail()
         }
     }

@@ -84,8 +84,9 @@ class ForgotPasswordActivity : AppCompatActivity() {
     private fun proceedWithPasswordReset(phoneNumber: String) {
         val request = ForgotPasswordRequest(phoneNumber)
 
+        val apiService = RetrofitInstance.getClient().create(ApiService::class.java)
         // Call the API to send the forgot password request
-        RetrofitInstance.apiService.forgotPassword(request).enqueue(object : Callback<ForgotPasswordResponse> {
+        apiService.forgotPassword(request).enqueue(object : Callback<ForgotPasswordResponse> {
             override fun onResponse(call: Call<ForgotPasswordResponse>, response: Response<ForgotPasswordResponse>) {
                 if (response.isSuccessful) {
                     Toast.makeText(this@ForgotPasswordActivity, "Reset link sent!", Toast.LENGTH_SHORT).show()

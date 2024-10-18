@@ -2,6 +2,7 @@ package com.example.pawsalon.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -28,7 +29,9 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
         mBinding.loginUsernameEt.onFocusChangeListener = this
         mBinding.loginPasswordEt.onFocusChangeListener = this
 
-        mBinding.loginBigBtn.setOnClickListener(this)
+        mBinding.loginBigBtn.setOnClickListener {
+            handleLogin()
+        }
 
         // Navigate to SignUp activity
         mBinding.signUpButton.setOnClickListener {
@@ -62,20 +65,27 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener, View.OnFocusCha
             val loginRequest = LoginRequest(username, password)
 
             // Call the login API using Retrofit
-            RetrofitInstance.apiService.login(loginRequest).enqueue(object : Callback<LoginResponse> {
+            val apiService = RetrofitInstance.getClient().create(ApiService::class.java)
+            apiService.login(loginRequest).enqueue(object : Callback<LoginResponse> {
                 override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                    if (response.isSuccessful && response.body() != null) {
+                    if (response.isSuccessful) {
                         val loginResponse = response.body()
                         Toast.makeText(this@LoginActivity, "Login Successful: ${loginResponse?.message}", Toast.LENGTH_SHORT).show()
-                        // Navigate to the next screen or save token
+                        // Handle success, navigate or store token
                     } else {
-                        Toast.makeText(this@LoginActivity, "Login failed: ${response.message()}", Toast.LENGTH_SHORT).show()
+                        // Log the raw response for debugging
+                        Toast.makeText(this@LoginActivity, "Login Failed: ${response.message()}", Toast.LENGTH_SHORT).show()
+                        Log.e("LoginError", "Response: ${response.errorBody()?.string()}") // Add this to log errors
                     }
                 }
 
+
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                    Toast.makeText(this@LoginActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                    // Log the error message
+                    Log.e("LoginError", "onFailure: ${t.message}", t)
+                    Toast.makeText(this@LoginActivity, "Login failed: ${t.message}", Toast.LENGTH_SHORT).show()
                 }
+
             })
         }
     }

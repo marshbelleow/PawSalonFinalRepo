@@ -12,16 +12,15 @@ data class LoginRequest(
 
 // Data model for login response
 data class LoginResponse(
-    val token: String,
-    val message: String
+    val token: String?,
+    val message: String?
 )
 
 // Data model for signup request
 data class SignUpRequest(
-    val firstName: String,
-    val lastName: String,
-    val phoneNumber: String,
+    val fullname: String,
     val username: String,
+    val email: String,
     val password: String
 )
 
@@ -48,7 +47,7 @@ interface ApiService {
     @POST("login")
     fun login(@Body request: LoginRequest): Call<LoginResponse>
 
-    @POST("signup")
+    @POST("register")
     fun signup(@Body signUpRequest: SignUpRequest): Call<SignUpResponse>
 
     @POST("forgot-password")

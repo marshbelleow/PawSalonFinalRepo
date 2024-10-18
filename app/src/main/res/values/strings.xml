@@ -29,4 +29,19 @@
     <string name="email_address">Email</string>
     <string name="full_name">Full Name</string>
     <string name="last_name">Last Name</string>
+    <string name="add_a_pet">Add a pet</string>
+    <string name="edit_username">Edit Username</string>
+    <string name="fur_baby">Fur Baby</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="user_profile_image">User Profile Image</string>
+    <string name="edit_name">Edit Name</string>
+    <string name="at_icon">At Icon</string>
+    <string name="phone_icon">Phone Icon</string>
+    <string name="edit_phone_number">Edit Phone Number</string>
+    <string name="location_icon">Location Icon</string>
+    <string name="edit_location">Edit Location</string>
+    <string name="save_profile">Save Profile</string>
+    <string name="add_pet_icon">Add Pet Icon</string>
+    <string name="pet_image">Pet Image</string>
+    <string name="pet_image_icon">Pet Image</string>
 </resources>

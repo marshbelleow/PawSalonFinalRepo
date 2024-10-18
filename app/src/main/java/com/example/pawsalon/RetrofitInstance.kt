@@ -1,18 +1,26 @@
 package com.example.pawsalon
 
 import com.example.pawsalon.network.ApiService
+import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitInstance {
+    private var retrofit: Retrofit? = null
 
-    private const val BASE_URL = "https://your-api-url.com/"
+    fun getClient(): Retrofit {
+        if (retrofit == null) {
+            // Create a Gson instance with setLenient()
+            val gson = GsonBuilder()
+                .setLenient() // Enable lenient parsing for potentially malformed JSON
+                .create()
 
-    val apiService: ApiService by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(ApiService::class.java)
+            // Build the Retrofit instance
+            retrofit = Retrofit.Builder()
+                .baseUrl("http://192.168.43.116:80/api/")
+                .addConverterFactory(GsonConverterFactory.create(gson)) // Pass the lenient Gson instance here
+                .build()
+        }
+        return retrofit!!
     }
 }
