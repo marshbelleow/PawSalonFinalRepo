@@ -1,11 +1,5 @@
-package com.example.pawsalon.view
+package com.example.pawsalon.network
 
-import com.example.pawsalon.network.ForgotPasswordRequest
-import com.example.pawsalon.network.ForgotPasswordResponse
-import com.example.pawsalon.network.LoginRequest
-import com.example.pawsalon.network.LoginResponse
-import com.example.pawsalon.network.SignUpRequest
-import com.example.pawsalon.network.SignUpResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST

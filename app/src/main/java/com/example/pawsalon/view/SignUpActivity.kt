@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.text.InputFilter
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -12,40 +13,47 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.pawsalon.R
 import com.example.pawsalon.RetrofitInstance
 import com.example.pawsalon.databinding.ActivitySignupBinding
+import com.example.pawsalon.network.ApiService
 import com.example.pawsalon.network.SignUpRequest
 import com.example.pawsalon.network.SignUpResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-// This class handles the user sign-up process, including validation of input fields
 class SignUpActivity : AppCompatActivity(), View.OnClickListener, View.OnFocusChangeListener, View.OnKeyListener {
 
-    // View binding to access layout components directly
     private lateinit var mBinding: ActivitySignupBinding
+
+    // Input filter to prevent spaces
+    private val noSpacesInputFilter = InputFilter { source, start, end, dest, dstart, dend ->
+        if (source.toString().contains(" ")) {
+            ""
+        } else {
+            null
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Inflate the layout using ViewBinding
         mBinding = ActivitySignupBinding.inflate(LayoutInflater.from(this))
         setContentView(mBinding.root)
 
-        // Assign listeners to input fields to handle focus changes and button clicks
+        // Apply the no spaces input filter to the password EditText
+        mBinding.signupPasswordEt.filters = arrayOf(noSpacesInputFilter)
+        mBinding.signupCPasswordEt.filters = arrayOf(noSpacesInputFilter)
+
         mBinding.signupUsernameEt.onFocusChangeListener = this
         mBinding.signupPasswordEt.onFocusChangeListener = this
         mBinding.signupCPasswordEt.onFocusChangeListener = this
         mBinding.fullnameSetupEt.onFocusChangeListener = this
         mBinding.signupEmailEt.onFocusChangeListener = this
 
-        // Set up click listener for the "Sign In" button to navigate to the login screen
         mBinding.signInButton.setOnClickListener {
             navigateToLogin()
         }
 
-        // Set up click listener for the "Sign Up" button to validate fields and sign up
         mBinding.signupBigBtn.setOnClickListener {
             if (validateAllFields()) {
-
                 val fullName = mBinding.fullnameSetupEt.text.toString().trim()
                 val username = mBinding.signupUsernameEt.text.toString().trim()
                 val email = mBinding.signupEmailEt.text.toString().trim()
@@ -53,12 +61,10 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener, View.OnFocusCh
                 val registerRequest = SignUpRequest(fullName, username, email, password)
                 val apiService = RetrofitInstance.getClient().create(ApiService::class.java)
 
-                // If all fields are valid, show a message and proceed with sign-up
-                apiService.signup(registerRequest).enqueue(object: Callback<SignUpResponse>{
+                apiService.signup(registerRequest).enqueue(object: Callback<SignUpResponse> {
                     override fun onResponse(call: Call<SignUpResponse>, response: Response<SignUpResponse>) {
                         if (response.isSuccessful) {
                             Toast.makeText(this@SignUpActivity, "Registered Successfully!", Toast.LENGTH_SHORT).show()
-                            // Navigate to login
                             startActivity(Intent(this@SignUpActivity, LoginActivity::class.java))
                             finish()
                         } else {
@@ -76,25 +82,21 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener, View.OnFocusCh
         }
     }
 
-    // Navigate to the login activity when the user clicks "Sign In"
     private fun navigateToLogin() {
         val intent = Intent(this, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
     }
 
-    // This method validates all input fields (first name, last name, email, username, password)
     private fun validateAllFields(): Boolean {
         val isFullNameValid = validateFullName()
         val isEmailValid = validateEmail()
         val isUsernameValid = validateUsername()
         val isPasswordValid = validatePassword() && validatePasswordAndConfirmPassword() && validateConfirmPassword()
 
-        // If any of the fields are invalid, return false. Otherwise, return true
         return isFullNameValid && isEmailValid && isUsernameValid && isPasswordValid && validateConfirmPassword()
     }
 
-    // Validate the first name field
     private fun validateFullName(): Boolean {
         var errorMessage: String? = null
         val firstName: String = mBinding.fullnameSetupEt.text.toString().trim()
@@ -104,7 +106,6 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener, View.OnFocusCh
         }
 
         if (errorMessage != null) {
-            // If there is an error, show it in the TextInputLayout
             mBinding.fullnameSetupTil.apply {
                 isErrorEnabled = true
                 error = errorMessage
@@ -116,10 +117,6 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener, View.OnFocusCh
         return errorMessage == null
     }
 
-
-
-
-    // Validate the email field (checks for empty and valid email format)
     private fun validateEmail(): Boolean {
         var errorMessage: String? = null
         val email: String = mBinding.signupEmailEt.text.toString().trim()
@@ -142,7 +139,6 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener, View.OnFocusCh
         return errorMessage == null
     }
 
-    // Validate the username field (length, format, and uniqueness)
     private fun validateUsername(): Boolean {
         var errorMessage: String? = null
         val username: String = mBinding.signupUsernameEt.text.toString().trim()
@@ -153,10 +149,7 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener, View.OnFocusCh
             errorMessage = "Username must be at least 6 characters long"
         } else if (!username.matches(Regex("^[a-zA-Z0-9_.]+$"))) {
             errorMessage = "Username can only contain letters, numbers, underscores, and periods"
-        } else if (username.startsWith("_") || username.startsWith(".") || username.endsWith("_") || username.endsWith(
-                "."
-            )
-        ) {
+        } else if (username.startsWith("_") || username.startsWith(".") || username.endsWith("_") || username.endsWith(".")) {
             errorMessage = "Username cannot start or end with special characters"
         } else if (!isUniqueUsername(username)) {
             errorMessage = "Username is already taken"
@@ -174,7 +167,6 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener, View.OnFocusCh
         return errorMessage == null
     }
 
-    // Validate the password field (checks for empty and minimum length)
     private fun validatePassword(): Boolean {
         var errorMessage: String? = null
         val password = mBinding.signupPasswordEt.text.toString().trim()
@@ -197,7 +189,6 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener, View.OnFocusCh
         return errorMessage == null
     }
 
-    // Validate the confirm password field (checks for empty field)
     private fun validateConfirmPassword(): Boolean {
         var errorMessage: String? = null
         val confirmPassword = mBinding.signupCPasswordEt.text.toString().trim()
@@ -218,7 +209,6 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener, View.OnFocusCh
         return errorMessage == null
     }
 
-    // Check if the password and confirm password fields match
     private fun validatePasswordAndConfirmPassword(): Boolean {
         var errorMessage: String? = null
         val password = mBinding.signupPasswordEt.text.toString().trim()
@@ -234,7 +224,6 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener, View.OnFocusCh
                 error = errorMessage
             }
         } else {
-            // Show a check mark if passwords match
             mBinding.signupCPasswordTil.apply {
                 setStartIconDrawable(R.drawable.check_circle_24)
                 setStartIconTintList(ColorStateList.valueOf(Color.GRAY))
@@ -244,7 +233,6 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener, View.OnFocusCh
         return errorMessage == null
     }
 
-    // Dummy method to check if the username is unique
     private fun isUniqueUsername(username: String): Boolean {
         val takenUsernames = listOf("user1", "admin", "test_user") // Simulate taken usernames
         return !takenUsernames.contains(username)
