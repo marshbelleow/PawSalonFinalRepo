@@ -8,10 +8,6 @@
     android:background="@color/white"
     tools:context=".view.LoginSignupActivity">
 
-    <!-- Logo ImageView -->
-
-    <!-- CardView for Login/Signup options -->
-
     <ImageView
         android:id="@+id/logoImage"
         android:layout_width="191dp"

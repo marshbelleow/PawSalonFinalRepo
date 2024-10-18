@@ -44,4 +44,9 @@
     <string name="add_pet_icon">Add Pet Icon</string>
     <string name="pet_image">Pet Image</string>
     <string name="pet_image_icon">Pet Image</string>
+    <string name="enter_email_or_username">Enter email or username</string>
+    <string name="email">Email</string>
+    <string name="no_worries_we_ll_set_you_back_on_track">No worries! We\'ll set you back on track</string>
+    <string name="enter_your_email">Enter your Email</string>
+    <string name="continue_button">Continue</string>
 </resources>

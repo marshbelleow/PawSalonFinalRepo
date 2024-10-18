@@ -11,7 +11,6 @@ import com.example.pawsalon.R
 import com.example.pawsalon.network.ForgotPasswordRequest
 import com.example.pawsalon.network.ForgotPasswordResponse
 import com.example.pawsalon.RetrofitInstance
-import com.example.pawsalon.network.ApiService
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
@@ -20,70 +19,52 @@ import retrofit2.Response
 
 class ForgotPasswordActivity : AppCompatActivity() {
 
-    private lateinit var phoneNumberTil: TextInputLayout
-    private lateinit var phoneNumberEt: TextInputEditText
+    private lateinit var forgot_pass_emailTil: TextInputLayout
+    private lateinit var forgot_pass_emailEt: TextInputEditText
     private lateinit var continueButton: Button
-
-    // Define the country code prefix
-    private val countryCode = "+63"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forgot_password)
 
         // Initialize views
-        phoneNumberTil = findViewById(R.id.phoneNumberTil)
-        phoneNumberEt = findViewById(R.id.phoneNumberEt)
+        forgot_pass_emailTil = findViewById(R.id.forgot_pass_emailTil)
+        forgot_pass_emailEt = findViewById(R.id.forgot_pass_emailEt)
         continueButton = findViewById(R.id.continue_bigBtn)
 
-        // Set the default text to +63 and ensure the cursor is placed after the prefix
-        phoneNumberEt.setText(countryCode)
-        phoneNumberEt.setSelection(phoneNumberEt.text?.length ?: 0)
-
-        // Add TextWatcher to prevent users from removing the +63 prefix
-        phoneNumberEt.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                // Ensure the text always starts with +63
-                if (!s.toString().startsWith(countryCode)) {
-                    phoneNumberEt.setText(countryCode)
-                    phoneNumberEt.setSelection(phoneNumberEt.text?.length ?: 0) // Move cursor to the end
-                }
-            }
+        // Add TextWatcher to clear error message when user starts typing
+        forgot_pass_emailEt.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // Clear the error message when the user starts typing
-                if (phoneNumberTil.error != null) {
-                    phoneNumberTil.error = null
+                if (forgot_pass_emailTil.error != null) {
+                    forgot_pass_emailTil.error = null
                 }
             }
         })
 
         // Continue button action
         continueButton.setOnClickListener {
-            // Get the entered phone number (excluding the country code) and validate it
-            val phoneNumber = phoneNumberEt.text.toString().trim().removePrefix(countryCode)
+            val input = forgot_pass_emailEt.text.toString().trim()
 
-            if (isPhoneNumberValid(phoneNumber)) {
-                // Proceed with the forgot password API call if phone number is valid
-                proceedWithPasswordReset(phoneNumber)
+            if (isInputValid(input)) {
+                proceedWithPasswordReset(input)
             } else {
-                // Show error message if phone number is invalid
-                phoneNumberTil.error = "Invalid phone number."
+                forgot_pass_emailTil.error = "Invalid username or email."
             }
         }
     }
 
-    // Function to validate phone number (10-digit without the +63)
-    private fun isPhoneNumberValid(phoneNumber: String): Boolean {
-        // Check if phone number is 10 digits long, starts with 9, and contains only digits
-        return phoneNumber.length == 10 && phoneNumber.startsWith("9") && phoneNumber.all { it.isDigit() }
+    // Function to validate input (email or username)
+    private fun isInputValid(input: String): Boolean {
+        return input.isNotEmpty() // Additional validation logic can be added here
     }
 
     // Function to proceed with the password reset
-    private fun proceedWithPasswordReset(phoneNumber: String) {
-        val request = ForgotPasswordRequest(phoneNumber)
+    private fun proceedWithPasswordReset(input: String) {
+        val request = ForgotPasswordRequest(input) // Adjust request constructor as needed
 
         val apiService = RetrofitInstance.getClient().create(ApiService::class.java)
         // Call the API to send the forgot password request
@@ -91,7 +72,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
             override fun onResponse(call: Call<ForgotPasswordResponse>, response: Response<ForgotPasswordResponse>) {
                 if (response.isSuccessful) {
                     Toast.makeText(this@ForgotPasswordActivity, "Reset link sent!", Toast.LENGTH_SHORT).show()
-                    // Optionally navigate to another activity, e.g., back to login
+                    // Navigate to another activity, e.g., back to login
                     startActivity(Intent(this@ForgotPasswordActivity, LoginActivity::class.java))
                     finish()
                 } else {
